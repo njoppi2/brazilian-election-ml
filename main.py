@@ -1,4 +1,4 @@
-from data_collection import get_candidates
+from data_collection import get_candidates, get_social_media
 
 # import data_preprocessing
 # import model_training
@@ -20,4 +20,5 @@ from data_collection import get_candidates
 # # Step 5: Prediction
 # prediction.make_prediction(model)
 
-get_candidates(2022)
+get_candidates(2022, redownload=True)
+get_social_media(2022, redownload=True)
