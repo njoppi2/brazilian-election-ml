@@ -1,15 +1,14 @@
-from data_collection import get_candidates, get_social_media
+from data_pipeline import DataPipeline
 
-# import data_preprocessing
-# import model_training
-# import model_evaluation
-# import prediction
+# Create an object to handle all data st
+data_pipeline = DataPipeline()
 
 # # Step 1: Data collection
-# data_collection.collect_data()
+data_pipeline.collect_data(2022, "candidates", redownload=False)
+data_pipeline.collect_data(2022, "social_media", redownload=False)
 
 # # Step 2: Data preprocessing
-# data_preprocessing.preprocess_data()
+data_pipeline.transform_data()
 
 # # Step 3: Model training
 # model = model_training.train_model()
@@ -20,5 +19,14 @@ from data_collection import get_candidates, get_social_media
 # # Step 5: Prediction
 # prediction.make_prediction(model)
 
-get_candidates(2022, redownload=True)
-get_social_media(2022, redownload=True)
+
+# to-do: do web scrapping (use beatiful soup)
+# to-do: use selenium to automate the web scrapping
+# to-do: use the Twitter API to get the tweets
+# to-do: use the Facebook API to get the posts
+# to-do: use the Instagram API to get the posts
+# to-do: preprocess the data
+# to-do: feature engineering
+
+
+# to-do: visualize data with Tableau, PowerBI or Microsoft Excel
