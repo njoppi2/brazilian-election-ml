@@ -65,7 +65,7 @@ def get_downloaded_content(folder_path):
             # Extract sub-folder and sub-sub-folder
             if len(dirs) > 0:
                 sub_folder = os.path.basename(root)
-                if sub_folder != "zips":
+                if sub_folder != "zips" and sub_folder != "sql":
                     for sub_dir in dirs:
                         folder_tuples.add((sub_folder, sub_dir))
                         
