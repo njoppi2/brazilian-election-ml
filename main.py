@@ -20,6 +20,9 @@ data_pipeline.transform_data()
 # prediction.make_prediction(model)
 
 
+# to-do: turn .csv files into pandas or python objects
+# to-do: remove accents from names
+# to-do: join data and exclude useless columns
 # to-do: do web scrapping (use beatiful soup)
 # to-do: use selenium to automate the web scrapping
 # to-do: use the Twitter API to get the tweets
@@ -30,3 +33,4 @@ data_pipeline.transform_data()
 
 
 # to-do: visualize data with Tableau, PowerBI or Microsoft Excel
+# download multiple stack clipboards
