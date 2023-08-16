@@ -3,12 +3,25 @@ from data_pipeline import DataPipeline
 # Create an object to handle all data st
 data_pipeline = DataPipeline()
 
-# # Step 1: Data collection
+# # Step 1: Get data from the TSE website, about the candidates, and the election results
 data_pipeline.collect_data(2022, "candidates", redownload=False)
 data_pipeline.collect_data(2022, "social_media", redownload=False)
+data_pipeline.collect_data(2022, "voting_section", redownload=False)
 
-# # Step 2: Data preprocessing
-data_pipeline.transform_data()
+# # Step 2: Data exploration with SQL, clean data (remove useless columns),
+# merge data into one database, with each row representing a candidate
+data_pipeline.transform_to_sql_tables(done=True)
+
+# scrap social media in order to more data for each candidate 
+# (like candidate social media engagement, google trends data about the candidate, etc.)
+
+#  Data exploration (again) with SQL, clean data (remove useless columns),
+# merge data into one database, with each row representing a candidate
+
+
+
+#--------------------------------------------------------------------------------------
+
 
 # # Step 3: Model training
 # model = model_training.train_model()
@@ -32,5 +45,4 @@ data_pipeline.transform_data()
 # to-do: feature engineering
 
 
-# to-do: visualize data with Tableau, PowerBI or Microsoft Excel
 # download multiple stack clipboards

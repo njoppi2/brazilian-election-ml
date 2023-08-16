@@ -1,4 +1,4 @@
 data/*
 !data/ibge
 __pycache__/
-.env
+data_collection_and_preprocessing/.env

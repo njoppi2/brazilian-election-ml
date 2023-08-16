@@ -35,7 +35,7 @@ def download_file(url, zip_folder, show_progress=True):
         return False
 
 
-def extract_zip(zip_path, extract_folder, show_progress=True):
+def extract_zip(zip_path, extract_folder, show_progress=False):
     try:
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             file_list = zip_ref.namelist()
@@ -65,7 +65,7 @@ def get_downloaded_content(folder_path):
             # Extract sub-folder and sub-sub-folder
             if len(dirs) > 0:
                 sub_folder = os.path.basename(root)
-                if sub_folder != "zips" and sub_folder != "sql":
+                if sub_folder != "zips":
                     for sub_dir in dirs:
                         folder_tuples.add((sub_folder, sub_dir))
                         
