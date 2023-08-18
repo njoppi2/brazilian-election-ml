@@ -1,6 +1,7 @@
 # 🇧🇷🗳️ Brazilian election ML
 The purpose of this project is to create an ML model that can closely approximate the votes received by each Brazilian deputy. The goal is to gain insights into the features that are most strongly correlated with a higher number of votes.
 
+(Work in progress...)
 ## 📁 Repository Structure
 
 **data_collection_and_preprocessing/:**
