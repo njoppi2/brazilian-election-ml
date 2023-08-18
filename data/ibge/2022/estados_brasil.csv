@@ -1,5 +1,5 @@
 Estados do Brasil
-UF [-],C&oacute;digo [-],Gent&iacute;lico [-],Governador [2023],Capital [2010],&Aacute;rea Territorial - km&sup2; [2022],Popula&ccedil;&atilde;o - pessoas [2022],Densidade demogr&aacute;fica - hab/km&sup2; [2022],Matrículas no ensino fundamental - matr&iacute;culas [2021],IDH &lt;span&gt;Índice de desenvolvimento humano&lt;/span&gt; [2021],Receitas realizadas - R$ (&times;1000) [2017],Despesas empenhadas - R$ (&times;1000) [2017],Rendimento mensal domiciliar per capita - R$ [2022],Total de ve&iacute;culos - ve&iacute;culos [2022],
+UF,Codigo,Gentilico,Governador,Capital,Area Territorial - km2,Populacao - pessoas,Densidade demografica - hab/km2,Matriculas no ensino fundamental - matriculas,IDH Indice de desenvolvimento humano,Receitas realizadas - R$ (x1000),Despesas empenhadas - R$ (x1000),Rendimento mensal domiciliar per capita - R$,Total de veiculos - veiculos,
 Acre,12,acriano,GLADSON DE LIMA CAMELI,Rio Branco,164173.429,830026,5.06,153015,0.71,6632883.10836,6084416.8063,1038,334377,
 Alagoas,27,alagoano,PAULO SURUAGY DO AMARAL DANTAS,Macei&oacute;,27830.661,3127511,112.38,458782,0.684,11950438.46015,10460634.91711,935,1034187,
 Amap&aacute;,16,amapaense,CL&Eacute;CIO LU&Iacute;S VILHENA VIEIRA,Macap&aacute;,142470.762,733508,5.15,133839,0.688,5396417.14471,4224464.08829,1177,232691,

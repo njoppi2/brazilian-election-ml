@@ -19,14 +19,41 @@ class DataPipeline:
         self.mid_url = {
             "candidates": "consulta_cand",
             "social_media": "consulta_cand",
-            "voting_section": "votacao_secao"
+            "voting_section": "votacao_secao",
+            "ibge": None
         }
         self.string = {
             "candidates": "consulta_cand",
             "social_media": "rede_social_candidato",
-            "voting_section": "votacao_secao"
+            "voting_section": "votacao_secao",
+            "ibge": None
         }
+
+        self.engine = self.create_postgresql_engine()
     
+    def create_postgresql_engine(self):
+        # Get the directory of the current Python script
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+
+        # Construct the path to the .env file
+        env_file_path = os.path.join(current_directory, '.env')
+
+        # Load environment variables from .env file
+        config = dotenv_values(env_file_path)
+
+        # PostgreSQL connection information
+        db_host = config['DB_HOST']
+        db_port = config['DB_PORT']
+        db_name = config['DB_NAME']
+        db_username = config['DB_USER']
+        # db_password = config['DB_PASSWORD']
+
+        # Combine all parts of the DB URL
+        # db_url = f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"
+        connection_string = f"postgresql://{db_username}@{db_host}:{db_port}/{db_name}"
+
+        engine = create_engine(connection_string)
+        return engine
 
     def collect_data(self, year, data_type, redownload=False):
         """
@@ -64,6 +91,8 @@ class DataPipeline:
                 download_and_extract(UF)
             progress_bar.close()
 
+        elif data_type == "ibge":
+            print("This data should be downloaded manually from the IBGE website. (https://www.ibge.gov.br/cidades-e-estados)")
         else:
             print("Invalid data type. Please provide a valid data type.")
             return
@@ -71,33 +100,13 @@ class DataPipeline:
         self.downloaded_data.add((year, data_type))
         
 
-    def transform_to_sql_tables(self, directories=None, table_prefix="", done=False):
-        if done:
+    def transform_to_sql_tables(self, directories=None, table_prefix=""):
+        
+        if directories == 'all':
+            directories = [f"{self.data_folder}/{item[0]}/{item[1]}" for item in self.downloaded_data]
+        elif directories is None:
             print("Data transformation already done. ⏩", flush=True)
             return
-        # Get the directory of the current Python script
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-
-        # Construct the path to the .env file
-        env_file_path = os.path.join(current_directory, '.env')
-
-        # Load environment variables from .env file
-        config = dotenv_values(env_file_path)
-
-        # PostgreSQL connection information
-        db_host = config['DB_HOST']
-        db_port = config['DB_PORT']
-        db_name = config['DB_NAME']
-        db_username = config['DB_USER']
-        # db_password = config['DB_PASSWORD']
-
-        # Combine all parts of the DB URL
-        # db_url = f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}"
-        db_url = f"postgresql://{db_username}@{db_host}:{db_port}/{db_name}"
-        engine = create_engine(db_url)
-        
-        if directories is None:
-            directories = [f"{self.data_folder}/{item[0]}/{item[1]}" for item in self.downloaded_data]
 
         for csv_directory in directories:
             print(f"Creating tables for .csv's inside {csv_directory}. ⏬", flush=True)
@@ -119,18 +128,14 @@ class DataPipeline:
                     skiprows = 0
 
                 # Read CSV file into a pandas DataFrame
-                # print("creating dataframe")
                 df = pd.read_csv(csv_file_path, encoding=encoding, delimiter=delimiter, skiprows=skiprows)
 
-                # print("creating sql table")
-                # df.to_sql(table_name, engine, index=False, if_exists="replace")#, method='multi', chunksize=100)
-
                 # Drop old table and create new empty table
-                df.head(0).to_sql(table_name, engine, if_exists='replace',index=False)
+                df.head(0).to_sql(table_name, self.engine, if_exists='replace',index=False)
 
                 chunk_size = 1000
                 for chunk in pd.read_csv(csv_file_path, encoding=encoding, delimiter=delimiter, skiprows=skiprows, chunksize=chunk_size):
-                    conn = engine.raw_connection()
+                    conn = self.engine.raw_connection()
                     cur = conn.cursor()
                     output = io.StringIO()
                     chunk.to_csv(output, sep='\t', header=False, index=False)
@@ -141,3 +146,33 @@ class DataPipeline:
                     cur.close()
                     conn.close()
                 progress_bar.set_postfix({'Current file': file_name})  # Update progress bar description
+            
+    def execute_query(self, query, is_ddl=False):
+        try:
+            # Create a database connection
+            conn = self.engine.raw_connection()
+            
+            # Create a cursor
+            cursor = conn.cursor()
+
+            # Execute the query
+            cursor.execute(query)
+            
+            # Commit the changes for DDL queries
+            if is_ddl:
+                conn.commit()
+
+            # Fetch the result as a DataFrame for SELECT queries
+            if not is_ddl:
+                query_result = pd.read_sql_query(query, conn)
+            else:
+                query_result = None
+            
+            # Close the cursor and connection
+            cursor.close()
+            conn.close()
+
+            return query_result
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
